@@ -1,0 +1,54 @@
+Script started on Fri 31 Mar 2017 05:58:04 PM EDT
+]0;abby@abby-cs161: ~/cs161/os161abby@abby-cs161:~/cs161/os161$ cd ~/cs161/root
+]0;abby@abby-cs161: ~/cs161/rootabby@abby-cs161:~/cs161/root$ sys161 kernel
+sys161: System/161 release 2.0.8, compiled Mar  2 2016 15:46:03
+
+OS/161 base system version 2.0.3
+Copyright (c) 2000, 2001-2005, 2008-2011, 2013, 2014
+   President and Fellows of Harvard College.  All rights reserved.
+
+Longcat's system version 0 (ASST3 #226)
+
+1812k physical memory available
+Device probe...
+lamebus0 (system main bus)
+emu0 at lamebus0
+ltrace0 at lamebus0
+ltimer0 at lamebus0
+beep0 at ltimer0
+rtclock0 at ltimer0
+lrandom0 at lamebus0
+random0 at lrandom0
+lhd0 at lamebus0
+lhd1 at lamebus0
+lser0 at lamebus0
+con0 at lser0
+
+cpu0: MIPS/161 (System/161 2.x) features 0x0
+cpu1: MIPS/161 (System/161 2.x) features 0x0
+cpu2: MIPS/161 (System/161 2.x) features 0x0
+cpu3: MIPS/161 (System/161 2.x) features 0x0
+buffers: max count 1024; max size 512k
+vfs: Swap attached to lhd0
+OS/161 kernel [? for menu]: p testbin/matmult
+matmult finished.
+answer is: 8772192 (should be 8772192)
+Passed.
+Operation took 1.338390965 seconds
+OS/161 kernel [? for menu]: p /sbin/poweroff
+Shutting down.
+cpu1: offline.
+The system is halted.
+cpu2: offline.
+cpu3: offline.
+sys161: 462936563 cycles (414557322 run, 48379241 global-idle)
+sys161:   cpu0: 373576006 kern, 5348198 user, 143492 idle; 1399697 ll, 1399697/0 sc, 2814382 sync
+sys161:   cpu1: 442219 kern, 0 user, 378625477 idle; 345 ll, 345/0 sc, 8951 sync
+sys161:   cpu2: 444940 kern, 0 user, 378622756 idle; 357 ll, 355/2 sc, 1178 sync
+sys161:   cpu3: 444589 kern, 0 user, 378623107 idle; 357 ll, 355/2 sc, 1172 sync
+sys161: 2763 irqs 1396 exns 0r/120w disk 35r/995w console 17r/0w/5m emufs 0r/0w net
+sys161: Elapsed real time: 12.314138 seconds (37.5939 mhz)
+sys161: Elapsed virtual time: 17.102168268 seconds (25 mhz)
+]0;abby@abby-cs161: ~/cs161/rootabby@abby-cs161:~/cs161/root$ exit
+
+Script done on Fri 31 Mar 2017 05:58:30 PM EDT

@@ -1,0 +1,80 @@
+# A2 Design Document Feedback
+# CS161 Staff
+# 02/10/2017
+
+# Overall Comments
+
+## What went well:
+
+You have thought through most of the major pieces of the assignment at some
+depth, although I think you're strategy with execv() argument handling may need
+a couple of iterations. Diligent use of pseudocode and good consideration for
+synchronization concerns. Definitely a strong A2 design document - please keep
+up the detail for A3 and A4!
+
+## What to work on:
+
+I would recommend writing unit tests for the functionality that you have
+outlined in this document - you could probably get them knocked out in a couple
+of days and it will make your lives easier in the long run. 
+
+# Line Comments
+
+## Introduction
+## Overview
+
+- The file descriptor is the integer used by the user process to index into file
+  descriptor table.
+
+- It is not necessarily true that two processes who read from the same file
+  should not also share the offset. For example, a parent and child process from
+  fork() should have the same file handles referenced by their file descriptor
+  table.
+
+## Global Constants
+
+- What is the difference between ARG_CPY_MAX and ARG_MAX?
+
+## Identifying Processes
+
+- What is the difference between FD_FREE and FT_MAX? 
+- Do you need to store in the proc struct whether the process has exited?
+- Please, please do not implement multi-threaded process, there should be a
+  one-to-one correspondence between processes and threads.
+- The exit()/waitpid() synchronization problem is best suited for a condition
+  variable, not a wchan and lock. 
+
+### Keeping track of processes
+
+- An array of size PID_MAX is probably too big - you will only have like 128
+  processes max and there are 64k possible PIDs (this is constrained by A3).
+- Can you defend that your PID use/allocation is efficient? What patterns of
+  exit()/fork() does it work well for, and which ones will it be bottlenecked?
+
+## File descriptors
+
+- I don't think you need to save flags or the state of the file handle, even
+  with your separate locks for refcount and offset. I think that you'll run into
+  issues if you use the fd.state to synchronize your file handles.
+- Because you only have single-threaded processes and only a process can
+  interact with its file table I do not think that you need one lock/file table.
+
+## Fork
+## Execv
+
+- We should talk about argument handling in execv(). Consider that multiple
+  processes could be calling execv() with ARG_MAX arguments at a time. Copying
+  the arguments in sequential blocks will not necessarily cut it in the limit of
+  many processes.
+
+## waitpid/exit
+## File I/O
+## Scheduling
+
+- Please think a little bit about scheduling before our one-on-one discussion on
+  2/11.
+
+## Plan of action
+
+- I would recommended blocking out how your allocating your programming time in
+  days. You will probably want (at least) a couple of days just for testing.

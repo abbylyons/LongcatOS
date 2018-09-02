@@ -1,0 +1,35 @@
+Script started on Thu 23 Feb 2017 10:41:05 PM EST
+]0;abby@abby-cs161: ~/cs161/rootabby@abby-cs161:~/cs161/root$ sys161 kernel
+sys161: System/161 release 2.0.8, compiled Mar  2 2016 15:46:03
+
+OS/161 base system version 2.0.3
+Copyright (c) 2000, 2001-2005, 2008-2011, 2013, 2014
+   President and Fellows of Harvard College.  All rights reserved.
+
+Longcat's system version 0 (ASST2 #187)
+
+4900k physical memory available
+Device probe...
+lamebus0 (system main bus)
+emu0 at lamebus0
+ltrace0 at lamebus0
+ltimer0 at lamebus0
+beep0 at ltimer0
+rtclock0 at ltimer0
+lrandom0 at lamebus0
+random0 at lrandom0
+lhd0 at lamebus0
+lhd1 at lamebus0
+lser0 at lamebus0
+con0 at lser0
+
+cpu0: MIPS/161 (System/161 2.x) features 0x0
+buffers: max count 2560; max size 1280k
+OS/161 kernel [? for menu]: s
+(program name unknown): Timing enabled.
+OS/161$ cp sys161.conf sys61.conf
+(program name unknown): subprocess time: 0.209511298 seconds
+OS/161$ 
+]0;abby@abby-cs161: ~/cs161/rootabby@abby-cs161:~/cs161/root$ exit
+
+Script done on Thu 23 Feb 2017 10:41:50 PM EST

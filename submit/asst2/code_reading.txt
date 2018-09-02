@@ -1,0 +1,18 @@
+1. ELF magic numbers are 4 magic numbers (0x7f, 'E', 'L', 'F') that are at the start of every elf file that act as a fingerprint that lets you check if a file is indeed an ELF file.
+2. UIO_USERISPACE is an enum value that represents that a uio is being used to copy user process code from/to a file. UIO_USERSPACE is an enum value that represents that a uio will be used to copy user process data. You should use UIO_SYSSPACE if you're using a uio to copy data between the kernel and a file..
+3. Because the uio will actually copy the data into vaddr that gets passed in.
+4. Because otherwise the file would remain open in the new process, causing a memory leak.
+5. enter_new_process is the function in runprogram that forces the cpu to switch into usermode. This function in turn calls mips_usermode, which is used to change into usermode. This function does seem to be machine-dependent, because to actually facilitate the switch, it calls asm_usermode which is written in MIPS assembly.
+6. copyin and copyout are defined in kern/include/copyinout.h and implemented in kern/vm/copyinout.c . memmove is defined in kern/include/lib.h and implemented in common/libc/string/memmove.c . copyin and copyout can't be implemented as simply because memory is being copied between user address space and the kernel address space. This opens up the possibility of fatal kernel memory faults if invalid addresses are supplied by user-level code.
+7. userptr_t is a pointer to a memory location in user space. It is used to point to user-level addresses. It's good because it helps us differentiate between pointers that are pointing to the user stack and the kernel stack.
+
+
+1. The numerical value is EX_SYS, which is defined in trapframe.h to be 8.
+2. 4; see line 141 in syscall.c, which advances the program counter.
+3. kill_curthread() should not panic; instead, it should be taken off the processor without giving control back to the user.
+4. The remaining arguments must be fetched from the user stack using copyin().
+
+
+1. The SYSCALL macro allows the kernel to determine the cause of the interrupt
+2. __syscall is a function in syscall-mips.S that uses an instruction syscall on line 84.
+3. The first argument is in register a0, the second argument is in registers a2/a3, and the last argument is on the user stack. The 64-bit offset is returned in registers v0/v1.

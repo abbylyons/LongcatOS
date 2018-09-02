@@ -1,0 +1,52 @@
+Script started on Thu 23 Feb 2017 08:51:37 PM EST
+]0;abby@abby-cs161: ~/cs161/rootabby@abby-cs161:~/cs161/root$ sys161 kernel
+sys161: System/161 release 2.0.8, compiled Mar  2 2016 15:46:03
+
+OS/161 base system version 2.0.3
+Copyright (c) 2000, 2001-2005, 2008-2011, 2013, 2014
+   President and Fellows of Harvard College.  All rights reserved.
+
+Longcat's system version 0 (ASST2 #183)
+
+4900k physical memory available
+Device probe...
+lamebus0 (system main bus)
+emu0 at lamebus0
+ltrace0 at lamebus0
+ltimer0 at lamebus0
+beep0 at ltimer0
+rtclock0 at ltimer0
+lrandom0 at lamebus0
+random0 at lrandom0
+lhd0 at lamebus0
+lhd1 at lamebus0
+lser0 at lamebus0
+con0 at lser0
+
+cpu0: MIPS/161 (System/161 2.x) features 0x0
+cpu1: MIPS/161 (System/161 2.x) features 0x0
+cpu2: MIPS/161 (System/161 2.x) features 0x0
+cpu3: MIPS/161 (System/161 2.x) features 0x0
+buffers: max count 2560; max size 1280k
+OS/161 kernel [? for menu]: tt2
+Starting thread test 2...
+7530657213406241
+Thread test 2 done.
+Operation took 0.497938160 seconds
+OS/161 kernel [? for menu]: p /sbin/poweroff
+Shutting down.
+cpu1: offline.
+cpu2: offline.
+cpu3: offline.
+The system is halted.
+sys161: 435129402 cycles (58076196 run, 377053206 global-idle)
+sys161:   cpu0: 16226524 kern, 20 user, 638885 idle; 10224 ll, 10224/0 sc, 78572 sync
+sys161:   cpu1: 7378106 kern, 0 user, 9487323 idle; 404 ll, 404/0 sc, 33784 sync
+sys161:   cpu2: 4808789 kern, 0 user, 12056640 idle; 378 ll, 377/1 sc, 31925 sync
+sys161:   cpu3: 3617282 kern, 0 user, 13248147 idle; 350 ll, 348/2 sc, 31857 sync
+sys161: 1138 irqs 5 exns 0r/0w disk 21r/950w console 8r/0w/3m emufs 0r/0w net
+sys161: Elapsed real time: 14.812907 seconds (29.375 mhz)
+sys161: Elapsed virtual time: 15.761035614 seconds (25 mhz)
+]0;abby@abby-cs161: ~/cs161/rootabby@abby-cs161:~/cs161/root$ exit
+
+Script done on Thu 23 Feb 2017 08:51:58 PM EST

@@ -1,0 +1,113 @@
+# A4 Design Document Feedback
+# CS161 Staff
+# 04/16/2017
+
+# Overall Comments
+
+## What went well:
+
+Decent design document, it appears that you've thought about a solid chunk of
+what's required for the assignment. I would recommend making another pass at
+filling some of the lighter sections out before beginning to hack.
+
+## What to work on:
+
+- How are you going to do testing?
+- Do you need to update any of the FS utilities (fsck, etc.)?
+- No consideration for how locking will interact with existing locks/order.
+- How are you going to enforce WAL?
+- There are several references that are not well-defined, for example
+  "protected" blocks. Some data structures are referenced before they're
+  defined, which can make things a bit confusing.
+- I would generally expect in a design document for this assignment a subsection
+  for every system call being journaled and then a step-by-step list of all
+  records that will be applied. At some point you'll have to mark all the places
+  where records are issued, there's no better time than now to do this!
+
+# Line Comments
+
+1. Introduction
+
+* How do you qualify as "mid-level" as opposed to "low" and "high"?
+* What kind of consistency are you going to guarantee (note that you could bring
+  the FS to a metadata-consistent state that either was at point true of the FS
+  or a "weakly consistent" state where you may not have actually been in that
+  state but the metadata is still consistent).
+
+2. Journaling
+
+* "process" does not seem like a a descriptive enough verb for what is going on
+  here, maybe "issue"?
+* Note that instead of having to pass a pointer for the journal record data
+  structure to process_journal_record, you could use C variable-length
+  parameters and then do a switch on the record type code.
+* Why do you need P_UNDO/REDO specified when issuing the record?
+
+2.1 Log entry overview
+
+* You can collapse records 3/4 into one and just store the freemap index and old
+  (or new) bitmap value
+* It is possible for a write to fail halfway through, you might consider records
+  that say "write X started" and "write X finished" so you can deal with
+  incomplete writes.
+
+2.2 Code
+
+- Do you need to checksum anything other than user data block writes
+  (sfs_writeblock)?
+- What is the metadata lock?
+- What is the ordering between metadata and freemap lock?
+- How does locking interact with other FS locks and buffer locks?
+- What does the checkpoint semaphore do?
+- Is this list of SFS functions and records exhaustive? You'll need more than
+  X/Y to do write and truncate...
+
+2.3 Formalized log entry data structures
+
+- Consider adding a prefix to your record code macros to designate them as
+  journal record types
+- What about fsync, sync, remove
+
+2.4 Process_journal_entry
+
+- What is a protected block?
+
+2.5 Checkpointing
+2.5.1 Data structures
+
+- You need to store the oldest and newest LSNs that touch a given buffer - why?
+- Am I correct that you're only storing one instance of sfs_metadata in sfs_fs?
+  Don't you need one of these structs per dirty buffer?
+- You should not change your existing semaphore implementation like this - at
+  best - copy it into a new one but don't overwrite - I'm not a huge believer in
+  the negative-valued semaphore, you can do this with 2 semaphores without
+  screwing with the semantics.
+
+2.5.2 Code
+2.5.3 Scheduling
+
+3. Recovery
+
+- If you use a directory for the morgue, then you have to deal with filenames
+  and what not - it'll probably be easier to just spin this up yourselves.
+
+3.1 Data structures
+3.2 Recovery code
+
+- What is a "protected block"? Is this user data block -> metadata block?
+- Is process_journal_record used both for journaling and for recovery? I assume
+  that you'll end up with different apply/revert functions for every record type
+  you have.
+
+4. Plan of action
+
+No, seriously...
+
+
+add freemap sync to the syncer thread
+
+missing syscalls:
+    -sync, fsync
+
+P_REMOVE is missing from enum
+Writing userdata blocks - add write start/end to keep partial userdata from being deleted. 

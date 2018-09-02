@@ -1,0 +1,45 @@
+1. It seems, that the other file will still have a reference to it. As such until the second process gives away it's reference to the inode, then the file won't be reclaimed and as such, writes and reads to/from it should succeed.
+
+2.
+    1. SYS_open -> vfs_open -> vfs_lookup -> VOP_LOOKUP -> sfs_lookup
+    2. SYS_write -> readwrite -> VOP_Write -> sfs_write -> sfs_io 
+    3. SYS_mkdir -> vfs_mkdir -> vfs_lookparent -> VOP_MKDIR -> sfs_mkdir
+
+3.
+    1. SYS_open -> sfs_lookup -> sfs_lookparent_internal -> sfs_lookonce -> sfs_loadvnode -> sfs_vnode_create
+    2. SYS_write -> sfs_io -> sfs_partial_io / sfs_blockio -> sfs_bmp -> sfs_bmap_subtree -> uiomove
+                                                    |
+                                                    -> sfs_bmap_get -> sfs_blockobj_set
+    3. SYS_mkdir -> sfs_mkdir -> sfs_makeobj -> sfs_balloc
+                        |
+                        ->sfs_dir_link -> sfs_writedir -> sfs_metaio -> sfs_bmp -> sfs_bmap_subtree -> uiomove
+                                                                |
+                                                                -> memcpy
+
+4. sfs_sync (called by syncer)
+   sync_fs_buffers (function to sync dirty buffers)
+   buffer_sync (marks buffer as busy before calling writeout)
+   buffer_writeout_internal (calls FSOP_writeblock to do the actual writing)
+
+5. 
+    1. safe
+    2. safe
+    3. safe
+    4. safe
+    5. unsafe
+
+6.
+    can handle:
+        - Link counts on files are inconsistent.
+        - Freemap and actual reachable blocks are not consistent.
+    can't handle:
+        - deal with files that were unlinked, but never reclaimed (the scenario presented in question 1).
+
+7. 
+    1. A crash happens during a 3-block write, such that blocks 1 and 3 are written onto disk but block 2 isn't.
+
+    2. A crash happens during mkdir. The linkcounts on the parent folder got incremented, but not on the child folder
+    
+    3. A block got allocated to a file, so it's being used, but a crash happened before the freemap got synced. As such the freemap still suggests that the block is free.
+
+    4. A file got freed by one process, while another process was still accessing it. then a crash happens, which means that no directories will have links to this file, but it's never been reclaimed, so the freemap still thinks it's allocated.
